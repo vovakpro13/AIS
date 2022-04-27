@@ -11,6 +11,7 @@
   "author": "vovakpro13@gmail.com",
   "license": "ISC",
   "dependencies": {
+    "colors": "^1.4.0",
     "nodemon": "^2.0.15"
   }
 }

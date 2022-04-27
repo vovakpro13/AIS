@@ -1,5 +1,6 @@
 const fs = require('fs');
 const readline = require('readline');
+const colors = require('colors');
 
 const countVertical = require("./helpers/countVertical");
 const countHorizontal = require("./helpers/countHorizontal");
@@ -8,7 +9,7 @@ const countDiagonals = require("./helpers/countDiagonals");
 const { KEYS_LETTERS } = require('./constants/keys-letters');
 const hasBottomLine = require("./helpers/hasBottomLine");
 
-console.log('Доступні букви: B, D, F, H, J, L, N, P, R, T ')
+console.log(`Доступні букви: ${Object.keys(KEYS_LETTERS).join(', ')}`)
 console.log('');
 
 const prompt = readline.createInterface({
@@ -49,7 +50,9 @@ async function checkLetter(letter) {
     );
 
     if (originKey === receivedKey) {
-        console.log("Ключ співпав! " + receivedKey);
+        console.log("Ключ співпав! " + receivedKey + '\n');
+
+        letterCodeArray.map(row => console.log(row.map(i => i === "1" ? i.underline.red : i.gray).toString()));
     } else {
         console.log("Шось не так :(");
     }
