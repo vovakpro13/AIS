@@ -2,72 +2,78 @@ const fs = require('fs');
 const readline = require('readline');
 const colors = require('colors');
 
-const countVertical = require("./helpers/countVertical");
-const countHorizontal = require("./helpers/countHorizontal");
-const countDiagonals = require("./helpers/countDiagonals");
+const {KEYS_LETTERS} = require('./constants/keys-letters');
+const IndicatorTranslator = require("./IndicatorTranslator");
 
-const { KEYS_LETTERS } = require('./constants/keys-letters');
-const hasBottomLine = require("./helpers/hasBottomLine");
-
-console.log(`Доступні букви: ${Object.keys(KEYS_LETTERS).join(', ')}`)
-console.log('');
-
-const prompt = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-});
+const NAMES = ['вертикалей', 'горизонталей', 'діагоналей', 'нижніх ліній'];
 
 
-const handleGetLetter = (letter) => {
-    try {
-        if (letter in KEYS_LETTERS){
-            checkLetter(letter);
-        } else {
-            throw new Error('Даної букви немає.');
-        }
-    } catch (error) {
-        console.log(error.toString());
-    } finally {
-        prompt.close();
-    }
+async function main() {
+    const distortedLetterTable = await readLetterFile("B_distorted");
+
+    console.log('Таблиця спотвореної B: \n');
+    distortedLetterTable.map(row => console.log(row.map(i => i === "1" ? i.underline.red : i.gray).toString()));
+
+    const translator = new IndicatorTranslator(distortedLetterTable);
+    const distortedCounts = translator.transformTableToKey();
+
+    const analytic = Object.entries(KEYS_LETTERS).map(([letter, key]) => {
+        const letterCounts = key.toString().split('').map(i => Number(i));
+
+        const analytic = getAnalytic(distortedCounts, letterCounts)
+        return { letter, ...analytic };
+    })
+
+    analytic.sort((a, b) => a.sum - b.sum);
+
+    console.log("\nРезультат (починаючи з релевантніших): \n");
+
+    analytic.map(({ letter, differences }, index) => {
+        const string = `${index + 1}. '` + letter + "' :";
+
+        console.log(printWithColor(string , index));
+        console.log(mapRatedStrings(differences));
+    });
 }
 
-prompt.question(`Введіть букву, яку потрібно перевірити: \n`, handleGetLetter);
+const printWithColor = (str, index) => ([str.bold.green, str.bold.cyan, str.bold.yellow])[index] || str.italic.grey;
+
+const getAnalytic = (distorted, normal) => distorted.reduce((acc, cur, index) => {
+    const difference = cur - normal[index];
+
+    acc.sum += Math.abs(difference);
+    acc.differences[index] = difference;
+
+    return acc;
+}, { sum: 0, differences: [0, 0, 0, 0] });
 
 
-async function checkLetter(letter) {
-    const originKey = KEYS_LETTERS[letter];
-
-    const letterCodeArray = await readLetterFile(letter);
-
-    const verticals = countVertical(letterCodeArray);
-    const horizontals = countHorizontal(letterCodeArray);
-    const diagonals = countDiagonals(letterCodeArray);
-    const bottomLine = hasBottomLine(letterCodeArray);
-
-    const receivedKey = Number(
-        verticals.toString() + horizontals.toString() + diagonals.toString() + bottomLine.toString()
-    );
-
-    if (originKey === receivedKey) {
-        console.log("Ключ співпав! " + receivedKey + '\n');
-
-        letterCodeArray.map(row => console.log(row.map(i => i === "1" ? i.underline.red : i.gray).toString()));
-    } else {
-        console.log("Шось не так :(");
+const mapRatedStrings = (differences) => differences.map((count, index) => {
+    if (count < 0) {
+        return `\t⛔ Не вистачає ${NAMES[index]}: ${Math.abs(count)} \n`
     }
-}
 
-async function readLetterFile(letter) {
+    if (count > 0) {
+        return `\t⛔ Кількість лишніх ${NAMES[index]}: ${Math.abs(count)}\n`
+    }
+
+    return `\t✅ Рівна кількість ${NAMES[index]}\n`
+}).join(' ')
+
+
+
+async function readLetterFile(name) {
     const symbols = [];
 
     const lineReader = readline.createInterface({
-        input: fs.createReadStream(`./letter-tables/${letter}.txt`)
+        input: fs.createReadStream(`./letter-tables/${name}.txt`)
     });
 
-    for await (const line of lineReader){
+    for await (const line of lineReader) {
         symbols.push(line.split(''));
     }
 
     return symbols;
 }
+
+main();
