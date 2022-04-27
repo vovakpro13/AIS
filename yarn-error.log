@@ -1,0 +1,36 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\melnyk_v\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js init
+
+PATH: 
+  C:\Users\melnyk_v\nltu\sai\lab-1\node_modules\.bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\Cloudflare\Cloudflare WARP\;C:\Users\melnyk_v\AppData\Local\Microsoft\WindowsApps;C:\Users\melnyk_v\AppData\Roaming\npm;";C:\Program Files\nodejs\";;C:\Program Files\JetBrains\PyCharm 2021.2.1\bin;;C:\Program Files (x86)\GitHub CLI\;C:\Users\melnyk_v\.dotnet\tools;C:\Program Files\JetBrains\IntelliJ IDEA 2021.3.2\bin;;C:\Program Files (x86)\BrowserStackLocal\
+
+Yarn version: 
+  1.22.11
+
+Node version: 
+  14.17.5
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (C:\Users\melnyk_v\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:137023:13)
+      at Interface.emit (events.js:400:28)
+      at Interface._ttyWrite (readline.js:910:16)
+      at ReadStream.onkeypress (readline.js:235:10)
+      at ReadStream.emit (events.js:400:28)
+      at emitKeys (internal/readline/utils.js:358:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1179:36)
+      at ReadStream.emit (events.js:400:28)
+      at addChunk (internal/streams/readable.js:290:12)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
