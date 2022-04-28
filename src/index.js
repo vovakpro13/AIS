@@ -11,11 +11,13 @@ const NAMES = ['вертикалей', 'горизонталей', 'діагон
 async function main() {
     const distortedLetterTable = await readLetterFile("B_distorted");
 
-    console.log('Таблиця спотвореної B: \n');
+    console.log('Таблиця спотвореної букви: \n');
     distortedLetterTable.map(row => console.log(row.map(i => i === "1" ? i.underline.red : i.gray).toString()));
 
     const translator = new IndicatorTranslator(distortedLetterTable);
     const distortedCounts = translator.transformTableToKey();
+
+    console.log(`\nКлюч спотвореної букви: ${distortedCounts.join('').blue}`);
 
     const analytic = Object.entries(KEYS_LETTERS).map(([letter, key]) => {
         const letterCounts = key.toString().split('').map(i => Number(i));
