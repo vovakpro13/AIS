@@ -22,33 +22,50 @@ class Graph {
         }
     }
 
-    dfs(startVertex, callback) {
-        let list = this.vertices; // список суміжності
-        let stack = [startVertex]; // стек вершин
-        let visited = {[startVertex]: 1}; // відвідані вершини
+    dfs(startVertex) {
+        console.log("Пішов в глибину");
 
-        function handleVertex(vertex) {
-            // колбек для пройденої вершини
-            callback(vertex);
+        const stack = [startVertex]; // стек вершин
+        const visited = {[startVertex]: true}; // відвідані вершини
+
+        // перебираєм вершини зі стеку
+        while (stack.length) {
+            const activeVertex = stack.pop();
+
+            console.log("Відвідав " + activeVertex + " вершину")
 
             // список суміжних вершин
-            let reversedNeighboursList = [...list[vertex]].reverse();
+            let reversedNeighboursList = [...this.vertices[activeVertex]].reverse();
 
             reversedNeighboursList.forEach(neighbour => {
                 if (!visited[neighbour]) {
                     // відмітив як відвідану
-                    visited[neighbour] = 1;
+                    visited[neighbour] = true;
                     stack.push(neighbour);
                 }
             });
         }
+    }
 
-        // перебираєм вершини зі стеку
-        while (stack.length) {
-            console.log("Стек: ",  stack);
+    bfs(startVertex) {
+        console.log("Пішов в ширину");
 
-            let activeVertex = stack.pop();
-            handleVertex(activeVertex);
+        const stack = [startVertex];
+        const visited = { [startVertex]: true };
+
+        while(stack.length) {
+            const vertex = stack.shift();
+
+            console.log("Відвідав " + vertex + " вершину")
+
+            const temp = this.vertices[vertex];
+
+            temp.forEach(n =>  {
+                if(!visited[n]) {
+                    visited[n] = true;
+                    stack.push(n);
+                }
+            })
         }
     }
 }
@@ -70,6 +87,6 @@ graph.addEdge(1, 6);
 graph.addEdge(6, 7);
 graph.addEdge(7, 5);
 
-graph.dfs(1, (vertex) => {
-    console.log("Відвідав " + vertex + " вершину")
-})
+graph.dfs(1, )
+console.log('-------------------------')
+graph.bfs(1,)
