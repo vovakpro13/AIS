@@ -28,8 +28,8 @@ async function main() {
 
     console.log("\nРезультат (починаючи з релевантніших): \n");
 
-    analytic.map(({ letter, differences }, index) => {
-        const string = `${index + 1}. '` + letter + "' :";
+    analytic.map(({ letter, differences, sum }, index) => {
+        const string = `${index + 1}. '` + letter + `' (min ∑ = ${ sum }) :`;
 
         console.log(printWithColor(string , index));
         console.log(mapRatedStrings(differences));
